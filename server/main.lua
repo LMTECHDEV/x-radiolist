@@ -201,8 +201,20 @@ elseif Framework.Initial == "qb" then
         local isAllowedToChangeName = isPlayerAllowedToChangeName(source, false)
         local hasCallsignSetAsName = Player(source).state[Shared.State.callsignIsSet]
         if not isAllowedToChangeName then
-            setPlayerName(source, playerData.metadata?.callsign or Player(source).state[Shared.State.nameInRadio])
+            local callsign = playerData.metadata?.callsign or "N/A"
+            local firstname = playerData.charinfo?.firstname or ""
+            local lastname = playerData.charinfo?.lastname or ""
+        
+            local radioName = string.format(
+                "%s | %s %s",
+                callsign,
+                firstname,
+                lastname
+            )
+        
+            setPlayerName(source, radioName)
             Player(source).state:set(Shared.State.callsignIsSet, true)
+
         elseif isAllowedToChangeName and hasCallsignSetAsName then
             resetPlayerName(source)
             Player(source).state:set(Shared.State.callsignIsSet, false)
